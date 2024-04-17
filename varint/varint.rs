@@ -12,12 +12,12 @@ fn encode(mut number: u64) -> Vec<u8> {
     return bytes;
 }
 
-fn decode(bytes: Vec<u8>) -> u64 {
+fn decode(mut bytes: Vec<u8>) -> u64 {
     let mut result: u64 = 0;
-    let mut shift: usize = 0;
-    for byte in bytes.iter() {
-        result += ((*byte) as u64 & 0x7F) << shift;
-        shift = shift + 7;
+    bytes.reverse();
+    for &byte in bytes.iter() {
+        result >>= 7;
+        result |= byte as u64;
     }
     return result;
 }
