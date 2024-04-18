@@ -14,7 +14,9 @@ def hex_to_int(hex: bytes) -> int:
 # (x,y)-> (y, height-1-x)
 
 
-def right_rotate(pixels: list[list[list[int]]], width: int, height: int, deep: int):
+def right_rotate(
+    pixels: list[list[list[int]]], width: int, height: int, deep: int
+) -> list[int]:
     # tmp = [[[0 for _ in range(deep)] for _ in range(height)] for _ in range(width)]
     result = []
     for i in range(width):
