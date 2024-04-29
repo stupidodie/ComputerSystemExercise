@@ -1,34 +1,18 @@
 #include <stdbool.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 bool ispangram(char *s) {
-  int counter = 0;
-  int count[26] = {0};
-  unsigned long size = strlen(s);
-  for (unsigned long i = 0; i < size; i++) {
-    if (s[i] >= 97 && s[i] <= 122) {
-      int c = s[i] - 97;
-      if (count[c] == 0) {
-        counter++;
-        if (counter == 26) {
-          return true;
-        }
-      }
-      count[c]++;
-    } else if (s[i] >= 65 && s[i] <= 90) {
-      int c = s[i] - 65;
-      if (count[c] == 0) {
-        counter++;
-        if (counter == 26) {
-          return true;
-        }
-      }
-      count[c]++;
-    }
+  uint32_t bs = 0;
+  char c;
+  while ((c = *s++) != '\0') {
+    if (c < '@')
+      continue;
+    bs |= 1 << (c & 0x1f);
   }
-  return false;
+  return (bs & 0x07fffffe) == 0x07fffffe;
 }
 
 int main() {
