@@ -5,68 +5,70 @@
 #define STARTING_CAPACITY 8
 
 typedef struct DA {
-  // TODO define our struct
   void **ptr;
-  int N;
+  size_t length;
+  size_t capacity;
 } DA;
 
 DA *DA_new(void) {
-  // TODO allocate and return a new dynamic array
-  return malloc(sizeof(DA));
+  DA *da = malloc(sizeof(DA));
+  da->ptr = malloc(STARTING_CAPACITY * sizeof(void *));
+  da->capacity = STARTING_CAPACITY;
+  da->length = 0;
+  return da;
 }
 
-int DA_size(DA *da) {
-  // TODO return the number of items in the dynamic array
-  return da->N;
-}
+int DA_size(DA *da) { return da->length; }
 
 void DA_push(DA *da, void *x) {
-  // TODO push to the end
-  void **new_ptr = malloc((da->N + 1) * sizeof(void *));
-  for (int i = 0; i < da->N; i++) {
-    new_ptr[i] = da->ptr[i];
+  if (da->length == da->capacity) {
+    void **new_ptr = malloc((da->capacity * 2) * sizeof(void *));
+    for (int i = 0; i < da->length; i++) {
+      new_ptr[i] = da->ptr[i];
+    }
+    void **old_ptr = da->ptr;
+    da->ptr = new_ptr;
+    free(old_ptr);
+    da->capacity *= 2;
   }
-  new_ptr[da->N] = x;
-  da->N++;
-  void **old_ptr = da->ptr;
-  da->ptr = new_ptr;
-  free(old_ptr);
+  da->ptr[da->length] = x;
+  da->length++;
 }
 
 void *DA_pop(DA *da) {
   // TODO pop from the end
-  if (da->N == 0) {
+  if (da->length == 0) {
     return NULL;
   }
-  void **new_ptr = malloc((da->N - 1) * sizeof(void *));
-  for (int i = 0; i < da->N - 1; i++) {
-    new_ptr[i] = da->ptr[i];
+  void *tmp = da->ptr[da->length - 1];
+  if (da->length * 2 < da->capacity) {
+    void **new_ptr = malloc((da->capacity / 2) * sizeof(void *));
+    for (int i = 0; i < da->length - 1; i++) {
+      new_ptr[i] = da->ptr[i];
+    }
+    void **old_ptr = da->ptr;
+    da->ptr = new_ptr;
+    free(old_ptr);
+    da->capacity /= 2;
   }
-  void *tmp = da->ptr[da->N - 1];
-  void **old_ptr = da->ptr;
-  da->N--;
-  da->ptr = new_ptr;
-  free(old_ptr);
+  da->length--;
   return tmp;
 }
 
 void DA_set(DA *da, void *x, int i) {
-  // TODO set at a given index, if possible
-  if (i < da->N) {
+  if (i < da->length) {
     da->ptr[i] = x;
   }
 }
 
 void *DA_get(DA *da, int i) {
-  // TODO get from a given index, if possible
-  if (i < da->N) {
+  if (i < da->length) {
     return da->ptr[i];
   }
   return NULL;
 }
 
 void DA_free(DA *da) {
-  // TODO deallocate anything on the heap
   free(da->ptr);
   free(da);
 }
