@@ -8,7 +8,7 @@ binary_convert:
 	je ._exit
 	shl eax, 1
 	inc rdi
-	sub ecx, '0'
+	and ecx,1
 	add eax, ecx
 	jmp ._loop
 ._exit:
