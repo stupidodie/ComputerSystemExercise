@@ -8,7 +8,5 @@ index:
 	; r8d: cindex
 	imul ecx, edx
 	Add ecx, r8d
-	imul ecx, 4
-	Add rdi, rcx
-	mov rax, [rdi]
+	mov rax, [rdi + 4 * rcx]
 	ret
