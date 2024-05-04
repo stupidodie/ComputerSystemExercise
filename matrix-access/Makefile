@@ -3,9 +3,11 @@ AS = nasm
 CFLAGS = -g -Wall -arch x86_64
 
 ifeq ($(shell uname -s),Darwin)
-	ASFLAGS = -g -f macho64 --prefix _
+    ASFLAGS = -g -f macho64 --prefix _
+    CFLAGS = -g -Wall -arch x86_64
 else
-	ASFLAGS = -g -f elf64
+    ASFLAGS = -g -f elf64
+    CFLAGS = -g -Wall -m64
 endif
 
 C_OBJS = $(patsubst %.c,%.o,$(wildcard *.c))
